@@ -32,64 +32,13 @@
         </div>
       </form>
     </div>
+    <div class="col-12 col-md-10 col-lg-7 me-auto ms-auto mt-3">
+      <label for="chat_room_url">Share this chat room</label>
+      <input type="text" class="disabled form-control" disabled value="" id="chat_room_url">
+    </div>
   </div>
 </div>
 {{room_name|json_script:"room-name"}}
 {{request.user.username|json_script:"user_username"}}
-<script>
-  let user_username = JSON.parse(document.getElementById('user_username').textContent);
-  if (!user_username) {
-    user_username = "Anonymous User";
 
-  }
-  const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
-
-  document.querySelector("#submit").onclick = function (e) {
-    const messageInputDOM = document.querySelector("#input");
-    const message = messageInputDOM.value;
-    if (message) {
-      const setUsername = document.querySelector("#setUsername");
-      console.log(setUsername.value)
-      if (!setUsername.value) {
-        alert("enter username");
-        setUsername.focus();
-      } else {
-        setUsername.setAttribute('disabled', 'true');
-      }
-      if (setUsername.value) {
-        user_username = setUsername.value;
-        chatSocket.send(JSON.stringify({
-          'message': message,
-          'username': user_username,
-        }));
-        messageInputDOM.value = '';
-        messageInputDOM.focus();
-      }
-
-    }
-
-  }
-
-  document.querySelector("#chat_form").onsubmit = function (e) {
-    e.preventDefault();
-    // document.querySelector("#submit").click();
-  }
-  const chatSocket = new WebSocket(
-    'ws://' +
-    window.location.host +
-    '/ws/chat/' +
-    roomName +
-    '/'
-  );
-  chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    console.log(data);
-    // document.querySelector("#user-hello").innerHTML = (data.tester);
-
-    document.querySelector("#chat-text").innerHTML += "<span class='message'> <span class='username'>" + (data
-      .username + ":</span> " + data.message +
-      "</span>");
-  }
-</script>
 {%endblock content%}

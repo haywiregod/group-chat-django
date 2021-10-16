@@ -1,6 +1,7 @@
 body {
     background: url('https://cdn.wallpapersafari.com/42/84/KFSVc0.jpg');
     color: #fefefe;
+    padding-bottom: 1em;
 }
 
 .chatroom #chat-text {
@@ -25,4 +26,10 @@ body {
 
 .message .username {
     font-weight: bold;
+}
+
+.home .join-room-btn {
+    width: max-content;
+    height: max-content;
+    place-self: center;
 }
