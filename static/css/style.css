@@ -1,0 +1,28 @@
+body {
+    background: url('https://cdn.wallpapersafari.com/42/84/KFSVc0.jpg');
+    color: #fefefe;
+}
+
+.chatroom #chat-text {
+    background: #f2f2f2aa;
+    min-height: 300px;
+    max-height: 50vh;
+    overflow-y: scroll;
+    padding: 1em;
+    scrollbar-width: thin;
+}
+
+.message {
+    font-size: 1.2rem;
+    background: #f2f2f2;
+    padding: 0.25em 0.5em;
+    border-radius: 0.5em;
+    line-height: 1.1;
+    display: block;
+    width: max-content;
+    margin-bottom: 0.5em;
+}
+
+.message .username {
+    font-weight: bold;
+}

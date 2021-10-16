@@ -1,0 +1,95 @@
+{%extends 'base.html'%}
+{% block content%}
+<div class="container chatroom">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center">
+        Django Group Chat
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-10 col-lg-7 me-auto ms-auto">
+      <h2>Hi, {{user}}</h1>
+        <h3>Welcome to {{room_name}} Chat Room</h3>
+    </div>
+    <div class="col-12 col-md-10 col-lg-7 me-auto ms-auto">
+      <form action="#" class="" id="chat_form">
+        <div class="row">
+
+          <div class="col-12 mb-2">
+            <input id="setUsername" type="text" size="80" class="form-control" placeholder="Set username here">
+          </div>
+          <div class="col-12 mb-3">
+            <div id="chat-text" cols="80" rows="10" class="form-control disabled"></div>
+          </div>
+          <div class="col-12 mb-2">
+            <input id="input" type="text" size="80" class="form-control" placeholder="Enter a message">
+          </div>
+          <div class="col-12">
+            <input id="submit" type="submit" value="Send" class="btn btn-success w-100">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{room_name|json_script:"room-name"}}
+{{request.user.username|json_script:"user_username"}}
+<script>
+  let user_username = JSON.parse(document.getElementById('user_username').textContent);
+  if (!user_username) {
+    user_username = "Anonymous User";
+
+  }
+  const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+
+  document.querySelector("#submit").onclick = function (e) {
+    const messageInputDOM = document.querySelector("#input");
+    const message = messageInputDOM.value;
+    if (message) {
+      const setUsername = document.querySelector("#setUsername");
+      console.log(setUsername.value)
+      if (!setUsername.value) {
+        alert("enter username");
+        setUsername.focus();
+      } else {
+        setUsername.setAttribute('disabled', 'true');
+      }
+      if (setUsername.value) {
+        user_username = setUsername.value;
+        chatSocket.send(JSON.stringify({
+          'message': message,
+          'username': user_username,
+        }));
+        messageInputDOM.value = '';
+        messageInputDOM.focus();
+      }
+
+    }
+
+  }
+
+  document.querySelector("#chat_form").onsubmit = function (e) {
+    e.preventDefault();
+    // document.querySelector("#submit").click();
+  }
+  const chatSocket = new WebSocket(
+    'ws://' +
+    window.location.host +
+    '/ws/chat/' +
+    roomName +
+    '/'
+  );
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    console.log(data);
+    // document.querySelector("#user-hello").innerHTML = (data.tester);
+
+    document.querySelector("#chat-text").innerHTML += "<span class='message'> <span class='username'>" + (data
+      .username + ":</span> " + data.message +
+      "</span>");
+  }
+</script>
+{%endblock content%}
