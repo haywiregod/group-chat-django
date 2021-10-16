@@ -39,8 +39,12 @@ if (chatRoomName) {
         e.preventDefault();
         // document.querySelector("#submit").click();
     }
+    socketProtocol = "ws://";
+    if (location.protocol === 'https:') {
+        socketProtocol = "wss://";
+    }
     const chatSocket = new WebSocket(
-        'ws://' +
+        socketProtocol +
         window.location.host +
         '/ws/chat/' +
         roomName +
